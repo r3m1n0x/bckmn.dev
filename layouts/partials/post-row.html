@@ -1,0 +1,4 @@
+<article class="post-row">
+  <div class="post-meta">{{ if .Params.preview }}<span class="preview-label">Design sample</span>{{ end }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time><span>{{ .Params.format | default "Article" }}</span></div>
+  <div><h3><a href="{{ .RelPermalink }}">{{ .Title }} <span aria-hidden="true">↗</span></a></h3><p>{{ .Description }}</p><div class="tags">{{ range .Params.tags }}<span>{{ . }}</span>{{ end }}</div></div>
+</article>

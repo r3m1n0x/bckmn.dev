@@ -1,0 +1,13 @@
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li class="brand-crumb"><a class="wordmark" href="{{ "" | relURL }}" aria-label="bckmn.dev home"{{ if .IsHome }} aria-current="page"{{ end }}><span aria-hidden="true">~/</span>bckmn.dev</a>{{ if .IsHome }}<span class="cursor" aria-hidden="true">_</span>{{ end }}</li>
+    {{ range .Ancestors.Reverse }}
+      {{ if not .IsHome }}<li><a href="{{ .RelPermalink }}">{{ if eq .Section "blog" }}blog{{ else }}{{ .LinkTitle | urlize }}{{ end }}</a></li>{{ end }}
+    {{ end }}
+    {{ if not .IsHome }}
+      {{ $label := .LinkTitle | urlize }}
+      {{ if .IsSection }}{{ $label = .Section }}{{ else if eq .RelPermalink ("about/" | relURL) }}{{ $label = "about" }}{{ else if eq .Kind "404" }}{{ $label = "404" }}{{ else }}{{ with .File }}{{ if eq .ContentBaseName "index" }}{{ $label = path.Base (path.Dir .Path) }}{{ else }}{{ $label = .ContentBaseName }}{{ end }}{{ end }}{{ end }}
+      <li class="current-crumb"><span class="crumb-label" aria-current="page" title="{{ .Title }}">{{ $label }}</span><span class="cursor" aria-hidden="true">_</span></li>
+    {{ end }}
+  </ol>
+</nav>

@@ -1,0 +1,19 @@
+{{ with .Page.Params.operator }}
+<div class="legal-contact">
+  <section aria-labelledby="operator-title">
+    <h3 id="operator-title">Website operator</h3>
+    <address>
+      <strong>{{ .name }}</strong><br>
+      {{ .street }}<br>
+      {{ .city }}<br>
+      {{ .country }}
+    </address>
+  </section>
+  <section aria-labelledby="contact-title">
+    <h3 id="contact-title">Contact</h3>
+    <p><a href="mailto:{{ .email }}">{{ .email }}</a></p>
+    <h3 id="responsibility-title">Responsible for content</h3>
+    <p>{{ .name }}<br><span class="legal-muted">At the address listed here.</span></p>
+  </section>
+</div>
+{{ end }}

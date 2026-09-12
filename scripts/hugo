@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+required_version="$(cat "$project_root/.hugo-version")"
+hugo_binary="$project_root/.tools/hugo"
+if [[ ! -x "$hugo_binary" ]]; then
+  hugo_binary="$(command -v hugo || true)"
+fi
+if [[ -z "$hugo_binary" ]] || [[ "$("$hugo_binary" version)" != "hugo v${required_version}"* ]]; then
+  printf 'Hugo %s is required. Run ./scripts/install-hugo first.\n' "$required_version" >&2
+  exit 1
+fi
+cd "$project_root"
+exec "$hugo_binary" "$@"

@@ -1,32 +1,55 @@
-name: github pages
+name: Build and publish website
 
 on:
   push:
-    branches:
-      - main  # Set a branch that will trigger a deployment
+    branches: [main]
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  deploy:
-    runs-on: ubuntu-22.04
+  build:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7.0.1
+      - name: Read Hugo version
+        id: hugo
+        run: echo "version=$(cat .hugo-version)" >> "$GITHUB_OUTPUT"
+      - uses: peaceiris/actions-hugo@v3.2.1
         with:
-          submodules: true  # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          hugo-version: ${{ steps.hugo.outputs.version }}
+      - name: Build and check
+        run: |
+          hugo --minify --panicOnWarning
+          python3 scripts/check-site.py public
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Read Hugo version
+        id: hugo
+        run: echo "version=$(cat .hugo-version)" >> "$GITHUB_OUTPUT"
+      - uses: peaceiris/actions-hugo@v3.2.1
         with:
-          hugo-version: 'latest'
-          extended: true
-
-      - name: Build
-        run: hugo --minify
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
+          hugo-version: ${{ steps.hugo.outputs.version }}
+      - name: Build and check deployment output
+        run: |
+          hugo --minify --panicOnWarning
+          python3 scripts/check-site.py public
+      - name: Publish to existing gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
           publish_dir: ./public

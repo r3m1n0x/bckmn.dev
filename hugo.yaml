@@ -1,0 +1,21 @@
+baseURL: https://www.bckmn.dev/
+locale: en-US
+title: Marvin Beckmann
+timeZone: Europe/Berlin
+disableKinds: [taxonomy, term]
+enableRobotsTXT: true
+enableEmoji: false
+pagination:
+  pagerSize: 10
+outputs:
+  home: [HTML, RSS]
+  section: [HTML]
+params:
+  description: Notes on infrastructure, troubleshooting, and things I learn along the way.
+markup:
+  highlight:
+    style: gruvbox
+    lineNos: false
+  tableOfContents:
+    startLevel: 2
+    endLevel: 3

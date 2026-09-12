@@ -1,0 +1,6 @@
+{{ define "main" }}
+<header class="page-heading"><p class="command-line" aria-hidden="true"><span class="prompt">❯</span> ls <span class="command-flag">-lt</span> <span class="command-path">./{{ .Section }}/</span></p><h1>{{ .Title }}<span class="accent">.</span></h1><div class="intro">{{ .Content }}</div></header>
+{{ $pager := .Paginate .RegularPages.ByDate.Reverse }}
+<section aria-label="Publications">{{ range $pager.Pages }}{{ partial "post-row.html" . }}{{ else }}<p class="empty">Nothing published yet.</p>{{ end }}</section>
+{{ if gt $pager.TotalPages 1 }}<nav class="pagination" aria-label="Blog pagination"><span>{{ with $pager.Prev }}<a href="{{ .URL }}">← Newer</a>{{ end }}</span><span>Page {{ $pager.PageNumber }} of {{ $pager.TotalPages }}</span><span>{{ with $pager.Next }}<a href="{{ .URL }}">Older →</a>{{ end }}</span></nav>{{ end }}
+{{ end }}
