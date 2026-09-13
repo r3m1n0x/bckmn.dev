@@ -1,0 +1,26 @@
+{{ define "main" }}
+<article class="article cv-page">
+  <header class="page-heading">
+    <p class="command-line" aria-hidden="true"><span class="prompt">❯</span> cat <span class="command-path">./cv/index.md</span></p>
+    <p class="eyebrow">Curriculum vitae</p>
+    <h1>{{ .Params.name }}</h1>
+    <p class="intro cv-role-title">{{ .Params.role }}</p>
+    <ul class="cv-contact" aria-label="Contact" role="list">
+      <li><a href="mailto:marvin@bckmn.dev">marvin@bckmn.dev</a></li>
+      <li><a href="https://github.com/R3m1n0X">github.com/R3m1n0X</a></li>
+      <li><a href="{{ site.BaseURL }}">www.bckmn.dev</a></li>
+    </ul>
+  </header>
+  <div class="cv-tools">
+    <nav aria-label="CV sections">
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#education">Education</a>
+      <a href="#technical-skills">Skills</a>
+      <a href="#certifications">Certifications</a>
+    </nav>
+    <p>For a PDF copy, use your browser’s Print menu and choose “Save as PDF”.</p>
+  </div>
+  <div class="prose">{{ .Content }}</div>
+</article>
+{{ end }}

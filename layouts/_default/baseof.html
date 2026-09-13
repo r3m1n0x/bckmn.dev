@@ -21,7 +21,7 @@
   <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
   <link rel="alternate" type="application/rss+xml" title="bckmn.dev" href="{{ "index.xml" | relURL }}">
 </head>
-<body>
+<body{{ if eq .Type "cv" }} class="cv-document"{{ end }}>
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="shell">
     <header class="site-header">
@@ -29,6 +29,8 @@
       <nav class="main-nav" aria-label="Main navigation">
         <a href="{{ "blog/" | relURL }}" {{ if eq .Section "blog" }}aria-current="page"{{ end }}>Blog</a>
         <a href="{{ "about/" | relURL }}" {{ if eq .RelPermalink ("about/" | relURL) }}aria-current="page"{{ end }}>About</a>
+        <a href="{{ "cv/" | relURL }}" {{ if eq .RelPermalink ("cv/" | relURL) }}aria-current="page"{{ end }}>CV</a>
+        {{ with site.GetPage "/gallery" }}{{ if and .Params.photos (in site.RegularPages .) }}<a href="{{ .RelPermalink }}" {{ if eq $.Type "gallery" }}aria-current="page"{{ end }}>Gallery</a>{{ end }}{{ end }}
         <a href="https://github.com/R3m1n0X">GitHub <span aria-hidden="true">↗</span></a>
       </nav>
     </header>

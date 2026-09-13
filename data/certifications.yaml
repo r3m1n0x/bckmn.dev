@@ -1,0 +1,9 @@
+- id: cks
+  name: Certified Kubernetes Security Specialist
+  url: https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/
+- id: cka
+  name: Certified Kubernetes Administrator
+  url: https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/
+- id: ckad
+  name: Certified Kubernetes Application Developer
+  url: https://training.linuxfoundation.org/certification/certified-kubernetes-application-developer-ckad/

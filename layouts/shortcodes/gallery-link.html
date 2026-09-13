@@ -1,0 +1,5 @@
+{{ with site.GetPage "/gallery" }}
+  {{ if and .Params.photos (in site.RegularPages .) }}
+  <p>My photographs have their own space in the <a href="{{ .RelPermalink }}">gallery</a>.</p>
+  {{ end }}
+{{ end }}

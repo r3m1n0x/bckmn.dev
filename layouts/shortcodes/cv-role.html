@@ -1,0 +1,10 @@
+<section class="cv-entry">
+  <p class="cv-period"><time datetime="{{ .Get "start" }}">{{ .Get "startLabel" }}</time><span aria-hidden="true"> — </span><span class="sr-only"> to </span>{{ with .Get "end" }}<time datetime="{{ . }}">{{ $.Get "endLabel" }}</time>{{ else }}<span class="cv-present">Present</span>{{ end }}</p>
+  <div class="cv-entry-body">
+    <header>
+      <h3>{{ .Get "role" }}</h3>
+      <p class="cv-employer">{{ .Get "company" }} <span>· {{ .Get "location" }}</span></p>
+    </header>
+    <div class="cv-details">{{ .Inner | markdownify }}</div>
+  </div>
+</section>

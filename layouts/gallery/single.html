@@ -1,0 +1,55 @@
+{{ define "main" }}
+<section class="gallery-page" aria-labelledby="gallery-title">
+  <header class="page-heading">
+    <p class="command-line" aria-hidden="true"><span class="prompt">❯</span> ls <span class="command-path">./gallery/</span></p>
+    <h1 id="gallery-title">{{ .Title }}<span class="accent">.</span></h1>
+    <div class="intro">{{ .Content }}</div>
+  </header>
+  {{ with .Params.photos }}
+  <div class="gallery-grid">
+    {{ range $index, $photo := . }}
+      {{ $path := printf "photography/%s" $photo.file }}
+      {{ $source := resources.Get $path }}
+      {{ if not $source }}
+        {{ errorf "Gallery image not found: assets/%s" $path }}
+      {{ else if not (reflect.IsImageResourceProcessable $source) }}
+        {{ errorf "Gallery image cannot be processed: assets/%s" $path }}
+      {{ else if not (and $photo.title $photo.alt) }}
+        {{ errorf "Gallery image %s needs a title and descriptive alt text" $path }}
+      {{ else }}
+        {{ $oriented := $source.Filter images.AutoOrient }}
+        {{ $small := $oriented.Fit "600x600 webp q82" }}
+        {{ $large := $oriented.Fit "1000x1000 webp q85" }}
+        {{ $full := $oriented.Fit "2400x2400 jpg q88" }}
+        {{ $id := printf "photo-%d" (add $index 1) }}
+        <figure class="gallery-photo">
+          <button class="gallery-image" type="button" popovertarget="{{ $id }}" aria-label="Enlarge: {{ $photo.title }}">
+            <img src="{{ $small.RelPermalink }}" srcset="{{ $small.RelPermalink }} {{ $small.Width }}w{{ if ne $small.Width $large.Width }}, {{ $large.RelPermalink }} {{ $large.Width }}w{{ end }}" sizes="(max-width: 700px) calc(100vw - 40px), (max-width: 1120px) 44vw, 490px" width="{{ $small.Width }}" height="{{ $small.Height }}" alt="{{ $photo.alt }}" loading="{{ if lt $index 2 }}eager{{ else }}lazy{{ end }}" decoding="async">
+            <span class="gallery-zoom" aria-hidden="true">↗</span>
+          </button>
+          <figcaption>
+            <h2>{{ $photo.title }}</h2>
+            {{ with $photo.caption }}<p>{{ . }}</p>{{ end }}
+            <a class="gallery-original" href="{{ $full.RelPermalink }}">Open image <span aria-hidden="true">↗</span></a>
+          </figcaption>
+        </figure>
+        <div class="gallery-lightbox" id="{{ $id }}" popover="auto" role="dialog" aria-labelledby="{{ $id }}-title">
+          <div class="gallery-lightbox-heading">
+            <h2 id="{{ $id }}-title">{{ $photo.title }}</h2>
+            <button type="button" popovertarget="{{ $id }}" popovertargetaction="hide" autofocus aria-label="Close enlarged photograph">Close <span aria-hidden="true">×</span></button>
+          </div>
+          <img src="{{ $full.RelPermalink }}" width="{{ $full.Width }}" height="{{ $full.Height }}" alt="{{ $photo.alt }}" loading="lazy" decoding="async">
+          {{ with $photo.caption }}<p>{{ . }}</p>{{ end }}
+        </div>
+      {{ end }}
+    {{ end }}
+  </div>
+  {{ else }}
+  <div class="gallery-empty">
+    <p class="eyebrow">Photography</p>
+    <h2>The first photographs are still to come.</h2>
+    <p>In the meantime, you can read <a href="{{ "about/" | relURL }}">a little more about me</a>.</p>
+  </div>
+  {{ end }}
+</section>
+{{ end }}
